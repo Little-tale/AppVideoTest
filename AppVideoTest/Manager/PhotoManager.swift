@@ -9,20 +9,6 @@ import UIKit.UIImage
 import PhotosUI
 import AVFoundation
 
-enum PhotoManagerError: Error {
-    case noAuth
-    case fail
-    
-    var message: String {
-        switch self {
-        case .noAuth:
-            "권한이 없습니다."
-        case .fail:
-            "실패하였습니다."
-        }
-    }
-}
-
 /// 이미지 관련된 기능을 제공하는 서비스 클래스 입니다.
 final class PhotoManager: NSObject {
     
@@ -37,7 +23,7 @@ final class PhotoManager: NSObject {
     
     // 편의상 클로저
     var results: (([URL]) -> Void)?
-
+    
     // MARK: 갤러리
     func presentPHPickerViewController(max: Int, option: PHPickerFilter? = nil) {
         var config = PHPickerConfiguration()
@@ -90,7 +76,6 @@ extension PhotoManager: PHPickerViewControllerDelegate {
     
     private func videoProcess(providers: [NSItemProvider]){
         var urls = [URL]()
-
         let group = DispatchGroup()
         
         providers.forEach { provider in
@@ -101,11 +86,21 @@ extension PhotoManager: PHPickerViewControllerDelegate {
                 provider.loadItem(forTypeIdentifier: "public.movie", options: nil) { (item, error) in
                     defer { group.leave() }
                     
-                    if let url = item as? URL {
-                        print("Video URL: \(url)")
-                        urls.append(url)
-                    } else if let error = error {
-                        print("Failed to load video URL: \(error)")
+                    guard let fileURL = item as? URL, error == nil else {
+                        print("Failed to load video: \(String(describing: error))")
+                        return
+                    }
+                    
+                    do {
+                        // 임시 디렉토리에 파일 저장
+                        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("mp4")
+                        try FileManager.default.copyItem(at: fileURL, to: tempURL)
+                        
+                        print("Temp Video URL: \(tempURL)")
+                        urls.append(tempURL)
+                        
+                    } catch {
+                        print("Failed to copy video file to temporary directory: \(error)")
                     }
                 }
             }

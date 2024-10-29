@@ -65,9 +65,48 @@ extension DefaultViewController {
     }
     
     private func setPhotoAction() {
-        photoManager.results = { result in
+        photoManager.results = {[weak self] result in
+            guard let self else { return }
+            
+            if let url = result.first {
+                if checkedURL(url: url) {
+                    setVideoURL(url: url)
+                }
+            }
             print("뷰컨에서 받은 액션",result)
+            
         }
+    }
+    private func checkedURL(url: URL) -> Bool {
+        if FileManager.default.fileExists(atPath: url.path) {
+            print("File exists at URL: \(url)")
+            return true
+        } else {
+            print("File does not exist at URL: \(url)")
+            return false
+        }
+
+    }
+    private func setVideoURL(url: URL) {
+        let player = AVPlayer(url: url)
+        let playerViewController = AVPlayerViewController()
+        playerViewController.player = player
+        
+        self.present(playerViewController, animated: true) {
+                playerViewController.player?.play()
+            }
+
+            // 비디오 재생이 완료되면 임시 파일 삭제
+            NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: player.currentItem, queue: .main) { _ in
+                do {
+                    try FileManager.default.removeItem(at: url)
+                    print("Temporary file deleted: \(url)")
+                } catch {
+                    print("Failed to delete temporary file: \(error)")
+                }
+                
+                NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+            }
     }
 }
 
