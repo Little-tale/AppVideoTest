@@ -9,11 +9,13 @@ import UIKit
 
 final class CustomPlayerView: UIView, BaseViewProtocol {
     private let stackView = UIStackView()
+    let playView = UIView()
     let leftButton = UIButton()
     let rightButton = UIButton()
     let playButton = UIButton()
     let exitButton = UIButton()
     let slider = UISlider()
+    let getButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,7 +31,7 @@ final class CustomPlayerView: UIView, BaseViewProtocol {
     
     func configureHierarchy(){
         [leftButton, playButton ,rightButton].forEach { stackView.addArrangedSubview($0) }
-        [stackView, exitButton, slider].forEach {
+        [playView, stackView, exitButton, slider, getButton].forEach {
             self.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.layer.shadowColor = UIColor.black.cgColor
@@ -41,6 +43,14 @@ final class CustomPlayerView: UIView, BaseViewProtocol {
     
     func configureLayout(){
         settingStackView
+        
+        // MARK: playView
+        NSLayoutConstraint.activate([
+            playView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            playView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            playView.widthAnchor.constraint(equalTo: self.widthAnchor),
+            playView.heightAnchor.constraint(equalTo: self.heightAnchor)
+        ])
         
         // MARK: StackView
         NSLayoutConstraint.activate([
@@ -62,6 +72,13 @@ final class CustomPlayerView: UIView, BaseViewProtocol {
             slider.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             slider.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
+        
+        // MARK: getButton
+        NSLayoutConstraint.activate([
+            getButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            getButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 20),
+            getButton.widthAnchor.constraint(equalToConstant: 60)
+        ])
     }
     
     func designView() {
@@ -70,6 +87,7 @@ final class CustomPlayerView: UIView, BaseViewProtocol {
         playButton.setTitle("play", for: .normal)
         rightButton.setTitle("right", for: .normal)
         exitButton.setTitle("exit", for: .normal)
+        getButton.setTitle("get", for: .normal)
     }
     
 }
