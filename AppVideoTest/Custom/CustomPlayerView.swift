@@ -98,6 +98,13 @@ extension CustomPlayerView {
         stackView.alignment = .center
         stackView.distribution = .fillEqually
     }
+    
+    func hidden(bool: Bool) {
+        UIView.animate(withDuration: 0.4) { [weak self] in
+            guard let self else { return }
+            [stackView, exitButton, slider, getButton].forEach { $0.isHidden = bool }
+        }
+    }
 }
 
 #if DEBUG
