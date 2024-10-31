@@ -5,11 +5,9 @@
 //  Created by Jae hyung Kim on 10/29/24.
 //
 
-import UIKit.UIImage
 import PhotosUI
-import AVFoundation
 
-/// 이미지 관련된 기능을 제공하는 서비스 클래스 입니다.
+/// 갤러리 매니저
 final class PhotoManager: NSObject {
     
     /// 이미지 피커를 띄울 뷰컨을 정의해주세요
@@ -81,34 +79,47 @@ extension PhotoManager: PHPickerViewControllerDelegate {
         providers.forEach { provider in
             group.enter()
             
-            // 동영상의 UTType 식별자: "public.movie"
-            if provider.hasItemConformingToTypeIdentifier("public.movie") {
-                provider.loadItem(forTypeIdentifier: "public.movie", options: nil) { (item, error) in
-                    defer { group.leave() }
-                    
-                    guard let fileURL = item as? URL, error == nil else {
-                        print("Failed to load video: \(String(describing: error))")
-                        return
+            if provider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
+                handleItemProvider(provider, typeIdentifier: UTType.movie.identifier) { url in
+                    if let url = url {
+                        urls.append(url)
                     }
-                    
-                    do {
-                        // 임시 디렉토리에 파일 저장
-                        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("mp4")
-                        try FileManager.default.copyItem(at: fileURL, to: tempURL)
-                        
-                        print("Temp Video URL: \(tempURL)")
-                        urls.append(tempURL)
-                        
-                    } catch {
-                        print("Failed to copy video file to temporary directory: \(error)")
+                    group.leave()
+                }
+            } else if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+                handleItemProvider(provider, typeIdentifier: UTType.image.identifier) { url in
+                    if let url = url {
+                        urls.append(url)
                     }
+                    group.leave()
                 }
             }
+            group.notify(queue: .main) { [weak self] in
+                guard let self else { return }
+                results?(urls)
+            }
         }
+    }
+    
+    private func handleItemProvider(_ itemProvider: NSItemProvider, typeIdentifier: String, completion: @escaping (URL?) -> Void){
         
-        group.notify(queue: .main) { [weak self] in
-            guard let self else { return }
-            results?(urls)
+        itemProvider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { url, error in
+            var resultUrl: URL? = nil
+            guard let url = url, error == nil else {
+                resultUrl = nil
+                return
+            }
+        
+            let destinationURL = FileManager.default
+                .temporaryDirectory
+                .appendingPathComponent(UUID().uuidString)
+                .appendingPathExtension(url.pathExtension)
+    
+            try? FileManager.default.copyItem(at: url, to: destinationURL)
+            
+            resultUrl = destinationURL
+            
+            completion(resultUrl)
         }
     }
 }
