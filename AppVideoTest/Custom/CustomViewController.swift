@@ -74,18 +74,30 @@ extension CustomViewController {
         playView.slider.addAction(
             UIAction { [weak self] _ in
                 guard let weakSelf = self else { return }
-                weakSelf.videoPlayer?.pause()
+                
+                weakSelf.videoPlayer?.pause() // 슬라이더 조작 중에는 일시 정지
                 weakSelf.ifPause = true
+                
                 guard let duration = weakSelf.videoPlayer?.currentItem?.duration else { return }
                 let value = Float64(weakSelf.playView.slider.value) * CMTimeGetSeconds(duration)
-                let seekTime = CMTime(value: CMTimeValue(value), timescale: 1)
+                let seekTime = CMTime(seconds: value, preferredTimescale: 600)
                 
+                // 시크 완료 후 다시 재생
                 weakSelf.videoPlayer?.seek(to: seekTime) { _ in
                     weakSelf.videoPlayer?.play()
                     weakSelf.ifPause = false
                 }
             },
-            for: .valueChanged
+            for: .touchUpInside // 슬라이더 끝난 경우에만
+        )
+        
+        playView.slider.addAction(
+            UIAction { [weak self] _ in
+                guard let weakSelf = self else { return }
+                weakSelf.videoPlayer?.pause()
+                weakSelf.ifPause = true
+            },
+            for: .touchDown // 슬라이더 시작 시 일시 정지
         )
         
         setTimer()

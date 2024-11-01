@@ -68,7 +68,7 @@ final class CustomPlayerView: UIView, BaseViewProtocol {
         
         // MARK: slider
         NSLayoutConstraint.activate([
-            slider.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20),
+            slider.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -50),
             slider.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             slider.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
