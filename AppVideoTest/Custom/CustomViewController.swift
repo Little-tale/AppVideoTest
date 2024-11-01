@@ -100,6 +100,17 @@ extension CustomViewController {
             for: .touchDown // 슬라이더 시작 시 일시 정지
         )
         
+        // MARK: 좌우 버튼 액션
+        playView.leftButton.addAction(
+            UIAction { [weak self] _ in
+                self?.moveTime(to: -10)
+        }, for: .touchUpInside)
+        
+        playView.rightButton.addAction(
+            UIAction { [weak self] _ in
+                self?.moveTime(to: 10)
+            }, for: .touchUpInside)
+        
         setTimer()
     }
     
@@ -183,6 +194,18 @@ extension CustomViewController {
             }
             let currentTime = currentItem.currentTime()
             playView.slider.value = Float(CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration))
+        }
+    }
+    
+    private func moveTime(to sec: Double) {
+        guard let videoPlayer else { return }
+        videoPlayer.pause()
+        let currentTime = videoPlayer.currentTime()
+        let moveTime = CMTimeGetSeconds(currentTime).advanced(by: sec)
+        let seekTime = CMTime(value: CMTimeValue(moveTime), timescale: 1)
+        
+        videoPlayer.seek(to: seekTime) { _ in
+            videoPlayer.play()
         }
     }
 }
