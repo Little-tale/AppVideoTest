@@ -10,12 +10,12 @@ import AVKit
 
 final class CustomViewController: UIViewController {
     
-    private let playView = CustomPlayerView()
-    private var videoPlayer : AVPlayer? = nil
-    private lazy var videoManager = PhotoManager(presentationViewController: self)
-    private var isPlaying = false
-    private var ifPause: Bool = false
-    private var timer: Timer? = nil
+     let playView = CustomPlayerView()
+     var videoPlayer : AVPlayer? = nil
+     lazy var videoManager = PhotoManager(presentationViewController: self)
+     var isPlaying = false
+     var ifPause: Bool = false
+     var timer: Timer? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,7 +145,7 @@ extension CustomViewController {
     }
     
     
-    private func setVideo(_ url: URL) {
+    func setVideo(_ url: URL) {
         videoPlayer = AVPlayer(url: url)
         guard let videoPlayer else { return }
         let playerLayer = AVPlayerLayer(player: videoPlayer)
