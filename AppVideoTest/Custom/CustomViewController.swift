@@ -182,7 +182,7 @@ extension CustomViewController {
         }
     }
     
-    private func updateSlider() {
+    func updateSlider() {
         guard let currentTime = videoPlayer?.currentTime() else { return }
         let currentTimeInSecond = CMTimeGetSeconds(currentTime)
         playView.slider.value = Float(currentTimeInSecond)
