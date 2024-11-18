@@ -52,7 +52,7 @@ extension CustomViewController {
         }
         
         let streamAction = UIAlertAction(title: "스트림", style: .default) { [weak self] _ in
-            guard let url = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/adv_dv_atmos/main.m3u8") else { return }
+            guard let url = URL(string: StreamingURLs.getRandomURLString()) else { return }
             self?.setVideo(url)
         }
         
@@ -169,13 +169,13 @@ extension CustomViewController {
     
     
     func setVideo(_ url: URL) {
+        removePlayer()
         videoPlayer = AVPlayer(url: url)
         guard let videoPlayer else { return }
         let playerLayer = AVPlayerLayer(player: videoPlayer)
         playerLayer.frame = view.frame
         
         UIView.animate(withDuration: 0.1) { [weak self] in
-            self?.removePlayer()
             self?.playView.playView.layer.addSublayer(playerLayer)
         }
         removeTempFile(player: videoPlayer, url: url)
