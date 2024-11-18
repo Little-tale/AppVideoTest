@@ -27,6 +27,7 @@
 		7B1E43B42CCFA48900DD1A42 /* AppVideoTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppVideoTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B1E43CA2CCFA48A00DD1A42 /* AppVideoTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppVideoTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B1E43D42CCFA48A00DD1A42 /* AppVideoTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppVideoTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B6EB82C2CD62F3B00244AE6 /* AppVideoTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppVideoTest.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -37,6 +38,16 @@
 			);
 			target = 7B1E43B32CCFA48900DD1A42 /* AppVideoTest */;
 		};
+		7B6EB8302CD6309600244AE6 /* Exceptions for "AppVideoTest" folder in "AppVideoTestTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Custom/BaseViewProtocol.swift,
+				Custom/CustomPlayerView.swift,
+				Custom/CustomViewController.swift,
+				Manager/PhotoManager.swift,
+			);
+			target = 7B1E43C92CCFA48A00DD1A42 /* AppVideoTestTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -44,6 +55,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				7B1E43DC2CCFA48A00DD1A42 /* Exceptions for "AppVideoTest" folder in "AppVideoTest" target */,
+				7B6EB8302CD6309600244AE6 /* Exceptions for "AppVideoTest" folder in "AppVideoTestTests" target */,
 			);
 			path = AppVideoTest;
 			sourceTree = "<group>";
@@ -88,6 +100,7 @@
 		7B1E43AB2CCFA48900DD1A42 = {
 			isa = PBXGroup;
 			children = (
+				7B6EB82C2CD62F3B00244AE6 /* AppVideoTest.xctestplan */,
 				7B1E43B62CCFA48900DD1A42 /* AppVideoTest */,
 				7B1E43CD2CCFA48A00DD1A42 /* AppVideoTestTests */,
 				7B1E43D72CCFA48A00DD1A42 /* AppVideoTestUITests */,

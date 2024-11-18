@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "86B29417-29C9-494A-9FC8-46E8E7972E76",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:AppVideoTest.xcodeproj",
+      "identifier" : "7B1E43B32CCFA48900DD1A42",
+      "name" : "AppVideoTest"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AppVideoTest.xcodeproj",
+        "identifier" : "7B1E43C92CCFA48A00DD1A42",
+        "name" : "AppVideoTestTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AppVideoTest.xcodeproj",
+        "identifier" : "7B1E43D32CCFA48A00DD1A42",
+        "name" : "AppVideoTestUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

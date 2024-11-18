@@ -26,17 +26,23 @@ final class AppVideoTestTests: XCTestCase {
 
     @MainActor
     func testSetVideo() throws {
+        print("Test started") // 테스트 시작 메시지
+
         // 테스트용 비디오 URL
         let testURL = Bundle.main.url(forResource: "sample", withExtension: "mp4")!
-        
         viewController.setVideo(testURL)
         
         // 비디오 플레이어가 초기화되었는지 확인
         XCTAssertNotNil(viewController.videoPlayer)
         
+        print("Video player is not nil") // 검증 후 메시지
+        
         // 비디오가 일시정지 상태로 시작되는지 확인
         XCTAssertFalse(viewController.isPlaying, "Video should be paused.")
+        
+        print("Test finished successfully") // 테스트 완료 메시지
     }
+
     
     @MainActor
     func testSeekAfterSliderMove() {

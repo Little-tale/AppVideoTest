@@ -82,7 +82,7 @@ final class CustomPlayerView: UIView, BaseViewProtocol {
     }
     
     func designView() {
-        self.backgroundColor = .clear
+        self.backgroundColor = .black.withAlphaComponent(0.01)
         leftButton.setTitle("left", for: .normal)
         playButton.setTitle("play", for: .normal)
         rightButton.setTitle("right", for: .normal)

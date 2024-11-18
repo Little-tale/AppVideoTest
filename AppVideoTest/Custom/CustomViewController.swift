@@ -35,16 +35,39 @@ final class CustomViewController: UIViewController {
 
 extension CustomViewController {
     
+    private func showActionSheet() {
+        let actionSheet = UIAlertController(
+            title: "테스트 선택",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        
+        let galleryAction = UIAlertAction(title: "갤러리", style: .default) { [weak self] _ in
+            self?.videoManager.results = { url in
+                if let url = url.first {
+                    self?.setVideo(url)
+                }
+            }
+            self?.videoManager.presentPHPickerViewController(max: 1, option: .videos)
+        }
+        
+        let streamAction = UIAlertAction(title: "스트림", style: .default) { [weak self] _ in
+            guard let url = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/adv_dv_atmos/main.m3u8") else { return }
+            self?.setVideo(url)
+        }
+        
+        [galleryAction, streamAction].forEach { action in
+            actionSheet.addAction(action)
+        }
+        
+        present(actionSheet, animated: true)
+    }
+    
     private func sentAction() {
         // MARK: GetButton
         playView.getButton.addAction(
             UIAction {[ weak self ] _ in
-                self?.videoManager.results = { url in
-                    if let url = url.first {
-                        self?.setVideo(url)
-                    }
-                }
-                self?.videoManager.presentPHPickerViewController(max: 1, option: .videos)
+                self?.showActionSheet()
             }
             , for: .touchUpInside)
         
@@ -157,8 +180,17 @@ extension CustomViewController {
         }
         removeTempFile(player: videoPlayer, url: url)
         videoPlayerObserve()
+        orientationDidChangeNotification(playerLayer: playerLayer)
     }
     
+    private func orientationDidChangeNotification(playerLayer: AVPlayerLayer) {
+        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            guard let weakSelf = self else { return }
+            RunLoop.main.schedule {
+                playerLayer.frame = weakSelf.view.frame
+            }
+        }
+    }
     private func removePlayer() {
         playView.playView.layer.sublayers?.forEach{ layer in
             if layer is AVPlayerLayer {
@@ -167,6 +199,11 @@ extension CustomViewController {
                 isPlaying = false
             }
         }
+        removeObserver()
+    }
+    
+    private func removeObserver() {
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     private func removeTempFile(player: AVPlayer, url: URL) {
